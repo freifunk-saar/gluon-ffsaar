@@ -4,7 +4,7 @@
 GWS="01 02 03 04"
 
 # Try to detect the selected gateway
-SEL_GW=$(batctl gwl | egrep "^=>" | tr -s ' ' | cut -d ' ' -f 2 | cut -d ':' -f 6)
+SEL_GW=$(batctl gwl | egrep "^\* " | tr -s ' ' | cut -d ' ' -f 2 | cut -d ':' -f 6)
 if [ -z "$SEL_GW" ]; then exit 1; fi
 
 # Delete the initially supplied rule that blocks *all* RAs
