@@ -1,1 +1,1 @@
-rule 'FORWARD --logical-out br-client -p IPv6 --ip6-proto ipv6-icmp --ip6-icmp-type router-advertisement -j DROP'
+rule 'FORWARD --in-interface ! local-port --logical-out br-client -p IPv6 --ip6-proto ipv6-icmp --ip6-icmp-type router-advertisement -j DROP'

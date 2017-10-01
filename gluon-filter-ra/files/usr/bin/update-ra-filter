@@ -8,16 +8,16 @@ SEL_GW=$(batctl gwl | egrep "^\* " | tr -s ' ' | cut -d ' ' -f 2 | cut -d ':' -f
 if [ -z "$SEL_GW" ]; then exit 1; fi
 
 # Delete the initially supplied rule that blocks *all* RAs
-ebtables -D FORWARD --logical-out br-client -p IPv6 --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP 2>/dev/null
+ebtables -D FORWARD --in-interface ! local-port --logical-out br-client -p IPv6 --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP 2>/dev/null
 
 # Check if the filter rule for the selected GW already exists by trying to change the counters by 0.
 # If it does, we are done.
-ebtables -C FORWARD +0 +0 --logical-out br-client -p IPv6 --ip6-src '!' fe80::ecee:eeff:feee:$SEL_GW --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP 2>/dev/null && exit 0
+ebtables -C FORWARD +0 +0 --in-interface ! local-port --logical-out br-client -p IPv6 --ip6-src '!' fe80::ecee:eeff:feee:$SEL_GW --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP 2>/dev/null && exit 0
 
 # Delete the old firewall rules.
 for GW in $GWS; do
-    ebtables -D FORWARD --logical-out br-client -p IPv6 --ip6-src '!' fe80::ecee:eeff:feee:$GW --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP 2>/dev/null
+    ebtables -D FORWARD --in-interface ! local-port --logical-out br-client -p IPv6 --ip6-src '!' fe80::ecee:eeff:feee:$GW --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP 2>/dev/null
 done
 
 # Set the desired rule.
-ebtables -A FORWARD --logical-out br-client -p IPv6 --ip6-src '!' fe80::ecee:eeff:feee:$SEL_GW --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP
+ebtables -A FORWARD --in-interface ! local-port --logical-out br-client -p IPv6 --ip6-src '!' fe80::ecee:eeff:feee:$SEL_GW --ip6-proto ipv6-icmp  --ip6-icmp-type router-advertisement -j DROP
