@@ -1,23 +1,24 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=tunneldigger
+PKG_NAME:=ffsaar-tunneldigger
 PKG_VERSION:=0.5
 PKG_RELEASE:=1
-PKG_REV:=f324f5f54dc8b0ef3f800c88db7c741261613296
+PKG_REV:=7432b25747eddcbf09f808520b3e21ec62b57a49
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=git://github.com/freifunk-saar/tunneldigger.git
+PKG_SOURCE_URL:=https://github.com/freifunk-saar/tunneldigger.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/tunneldigger
+define Package/ffsaar-tunneldigger
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libnl-tiny +kmod-l2tp +kmod-l2tp-ip +kmod-l2tp-eth +librt +libpthread
   TITLE:=L2TPv3 tunnel broker client
+  PROVIDES:=tunneldigger
 endef
 
 TARGET_CFLAGS += \
@@ -31,7 +32,7 @@ define Build/Prepare
 	sed -i s/-lnl/-lnl-tiny/g $(PKG_BUILD_DIR)/Makefile
 endef
 
-define Package/tunneldigger/install
+define Package/ffsaar-tunneldigger/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/l2tp_client $(1)/usr/bin/tunneldigger
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -40,8 +41,8 @@ define Package/tunneldigger/install
 	$(INSTALL_DATA) ./files/config.default $(1)/etc/config/tunneldigger
 endef
 
-define Package/tunneldigger/conffiles
+define Package/ffsaar-tunneldigger/conffiles
 /etc/config/tunneldigger
 endef
 
-$(eval $(call BuildPackage,tunneldigger))
+$(eval $(call BuildPackage,ffsaar-tunneldigger))
