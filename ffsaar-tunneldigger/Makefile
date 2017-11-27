@@ -3,7 +3,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ffsaar-tunneldigger
 PKG_VERSION:=0.5
 PKG_RELEASE:=1
-PKG_REV:=7432b25747eddcbf09f808520b3e21ec62b57a49
+PKG_REV:=54d9a751eb295288786f65f490cbed64957937b2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://github.com/freifunk-saar/tunneldigger.git
@@ -12,6 +12,7 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/cmake.mk
 
 define Package/ffsaar-tunneldigger
   SECTION:=net
@@ -21,20 +22,14 @@ define Package/ffsaar-tunneldigger
   PROVIDES:=tunneldigger
 endef
 
-TARGET_CFLAGS += \
-	-I$(STAGING_DIR)/usr/include/libnl-tiny \
-	-I$(STAGING_DIR)/usr/include \
-	-DLIBNL_TINY
-
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	mv $(PKG_BUILD_DIR)/client/* $(PKG_BUILD_DIR)
-	sed -i s/-lnl/-lnl-tiny/g $(PKG_BUILD_DIR)/Makefile
 endef
 
 define Package/ffsaar-tunneldigger/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/l2tp_client $(1)/usr/bin/tunneldigger
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tunneldigger $(1)/usr/bin/tunneldigger
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/tunneldigger.init $(1)/etc/init.d/tunneldigger
 	$(INSTALL_DIR) $(1)/etc/config
