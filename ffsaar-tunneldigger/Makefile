@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffsaar-tunneldigger
-PKG_VERSION:=0.5
-PKG_RELEASE:=1
-PKG_REV:=54d9a751eb295288786f65f490cbed64957937b2
+PKG_VERSION:=0.4.7
+PKG_RELEASE:=2
+PKG_REV:=210037aabf8538a0a272661e08ea142784b42b2c
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/freifunk-saar/tunneldigger.git
+PKG_SOURCE_URL:=git://github.com/wlanslovenija/tunneldigger.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
